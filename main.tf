@@ -2,7 +2,7 @@
 
 provider "aws" {
     access_key = var.aws_access_key
-    secret_key = "sc"
+    secret_key = var.aws_secret_key
     region = "us-east-1"
 }
 
@@ -16,6 +16,8 @@ data "aws_ssm_parameter" "ami" {
 resource "aws_vpc" "vpc" {
   cidr_block = "10.0.0.0/16"
   enable_dns_hostnames = "true"
+
+  tags = local.common_tags
 }
 
 resource "aws_internet_gateway" "igw" {
@@ -64,6 +66,7 @@ resource "aws_subnet" "subnet1" {
        protocol = "-1"
        cidr_blocks = ["0.0.0.0/0"]
    }
+   tags = local.common_tags
  }
 
  #INSTANCES 
@@ -80,4 +83,6 @@ resource "aws_subnet" "subnet1" {
    sudo rm /usr/share/nginx/html/index.html
    echo '<html><head><title>Taco team server</title></head><body style=\"background-color:#1F778D\"><p>hello world</p></body></html>
    EOF
+
+   tags = local.common_tags
  }
